@@ -7,6 +7,7 @@ import { useAccount, useDisconnect } from "wagmi";
 import {
   IExecDataProtector,
   IExecDataProtectorCore,
+  ProtectedData,
 } from "@iexec/dataprotector";
 import { Input } from "@/components/ui/input";
 
@@ -17,7 +18,11 @@ export default function Home() {
 
   const [dataProtectorCore, setDataProtectorCore] =
     useState<IExecDataProtectorCore | null>(null);
-  const [dataToProtect, setDataToProtect] = useState("");
+  const [dataToProtect, setDataToProtect] = useState({
+    name: "",
+    data: "",
+  });
+  const [protectedData, setProtectedData] = useState<ProtectedData>();
 
   const login = () => {
     open({ view: "Connect" });
@@ -48,11 +53,13 @@ export default function Home() {
     if (dataProtectorCore) {
       try {
         const protectedData = await dataProtectorCore.protectData({
+          name: dataToProtect.name,
           data: {
-            email: dataToProtect,
+            email: dataToProtect.data,
           },
         });
         console.log("Protected Data:", protectedData);
+        setProtectedData(protectedData);
       } catch (error) {
         console.error("Error protecting data:", error);
       }
@@ -79,20 +86,53 @@ export default function Home() {
       </nav>
       <section className="p-2 pt-8">
         {isConnected ? (
-          <form onSubmit={protectData} className="p-2 space-y-2">
-            <div className="space-y-1">
-              <label htmlFor="data_to_protect">Data to protect</label>
-              <Input
-                onChange={(e) => setDataToProtect(e.target.value)}
-                type="text"
-                id="data_to_protect"
-                placeholder="Type a text to protect it"
-              />
-            </div>
-            <Button disabled={!dataToProtect} type="submit">
-              Protect my data
-            </Button>
-          </form>
+          <div>
+            <form onSubmit={protectData} className="p-2 space-y-2">
+              <div className="space-y-1">
+                <label htmlFor="data_to_protect">Data to protect name</label>
+                <Input
+                  onChange={(e) =>
+                    setDataToProtect((prevData) => ({
+                      ...prevData,
+                      name: e.target.value,
+                    }))
+                  }
+                  type="text"
+                  id="data_to_protect"
+                  placeholder="Type a text to name your data"
+                />
+              </div>
+              <div className="space-y-1">
+                <label htmlFor="data_to_protect">Data to protect</label>
+                <Input
+                  onChange={(e) =>
+                    setDataToProtect((prevData) => ({
+                      ...prevData,
+                      data: e.target.value,
+                    }))
+                  }
+                  type="text"
+                  id="data_to_protect"
+                  placeholder="Type a text to protect it"
+                />
+              </div>
+              <Button
+                disabled={!dataToProtect.name || !dataToProtect.data}
+                type="submit"
+              >
+                Protect my data
+              </Button>
+            </form>
+            {protectedData && (
+              <div className="bg-emerald-200 p-4 rounded-2xl">
+                <p>My protectedData information</p>
+                <p>Name : {protectedData.name}</p>
+                <p>Address : {protectedData.address}</p>
+                <p>Owner : {protectedData.owner}</p>
+                <p>Multiaddr : {protectedData.multiaddr}</p>
+              </div>
+            )}
+          </div>
         ) : (
           <p>Please connect your wallet</p>
         )}
