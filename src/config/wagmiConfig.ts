@@ -1,4 +1,4 @@
-import { cookieStorage, createStorage, http } from '@wagmi/core'
+import { http } from '@wagmi/core'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import { bellecour } from './bellecourChainConfig';
 import { createAppKit } from '@reown/appkit/react';
