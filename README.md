@@ -1,4 +1,3 @@
-
 # 🛠️ iExec Front Starter — Getting Started with Reown & DataProtector
 
 This guide walks you through setting up a **Next.js frontend** integrated with **Reown (WalletConnect)** and **iExec DataProtector**.
@@ -29,10 +28,11 @@ During setup, choose your preferences:
 ## 🔐 Step 2 — Create Your Reown Project
 
 Go to [https://cloud.reown.com/app](https://cloud.reown.com/app)  
+→ Create a project
 → Choose **AppKit**  
 → Select **Next.js** as the framework
 
-You’ll be asked for the **Homepage URL**. Run your project:
+You’ll be asked for the **Homepage URL**. you can run your project to find your URL:
 
 ```bash
 npm run dev
@@ -46,10 +46,16 @@ Then use the URL it shows (e.g. `http://localhost:3000` or your local IP like `h
 
 ```bash
 npm install @reown/appkit @reown/appkit-adapter-wagmi wagmi viem @tanstack/react-query
-npm install @iexec/dataprotector graphql undici
+npm install @iexec/dataprotector graphql
 npx shadcn@latest add button --legacy-peer-deps
 npx shadcn@latest add input --legacy-peer-deps
 ```
+
+> **Note:** If you encounter an error about missing `undici` package, you can install it by running:
+>
+> ```bash
+> npm install undici
+> ```
 
 ---
 
@@ -60,7 +66,7 @@ Create these files in the `src/config/` folder:
 - [`bellecourChainConfig.ts`](./src/config/bellecourChainConfig.ts)
 - [`wagmiConfig.ts`](./src/config/wagmiConfig.ts)
 
-You can copy them from the GitHub repo or reuse existing examples.
+You can copy them from the GitHub repo and study the code.
 
 ---
 
