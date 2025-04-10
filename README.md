@@ -46,7 +46,7 @@ Then use the URL it shows (e.g. `http://localhost:3000` or your local IP like `h
 
 ```bash
 npm install @reown/appkit @reown/appkit-adapter-wagmi wagmi viem @tanstack/react-query
-npm install @iexec/dataprotector graphql
+npm install @iexec/dataprotector graphql undici
 npx shadcn@latest add button --legacy-peer-deps
 npx shadcn@latest add input --legacy-peer-deps
 ```
