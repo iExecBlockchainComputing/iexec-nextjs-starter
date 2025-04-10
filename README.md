@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛠️ iExec Front Starter — Getting Started with Reown & DataProtector
 
-## Getting Started
+This guide walks you through setting up a **Next.js frontend** integrated with **Reown (WalletConnect)** and **iExec DataProtector**.
 
-First, run the development server:
+---
+
+## 🚧 Step 1 — Create Your Next.js App
+
+```bash
+npx create-next-app@latest
+```
+
+During setup, choose your preferences:
+
+```
+✔ What is your project named? … iexec-front-starter
+✔ Use TypeScript? … Yes
+✔ Use ESLint? … Yes
+✔ Use Tailwind CSS? … Yes
+✔ Put code in `src/` directory? … Yes
+✔ Use App Router? … Yes
+✔ Use Turbopack for `next dev`? … No
+✔ Customize import alias? … No
+```
+
+---
+
+## 🔐 Step 2 — Create Your Reown Project
+
+Go to [https://cloud.reown.com/app](https://cloud.reown.com/app)  
+→ Create a project
+→ Choose **AppKit**  
+→ Select **Next.js** as the framework
+
+You’ll be asked for the **Homepage URL**. you can run your project to find your URL:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then use the URL it shows (e.g. `http://localhost:3000` or your local IP like `http://192.168.1.X:3000`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Step 3 — Install Required Packages
 
-## Learn More
+```bash
+npm install @reown/appkit @reown/appkit-adapter-wagmi wagmi viem @tanstack/react-query
+npm install @iexec/dataprotector graphql undici
+npx shadcn@latest add button --legacy-peer-deps
+npx shadcn@latest add input --legacy-peer-deps
+```
 
-To learn more about Next.js, take a look at the following resources:
+> **Note:** If you encounter an error about missing `undici` package, you can install it by running:
+>
+> ```bash
+> npm install undici
+> ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🧩 Step 4 — Add Configuration Files
 
-## Deploy on Vercel
+Create these files in the `src/config/` folder:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [`bellecourChainConfig.ts`](./src/config/bellecourChainConfig.ts)
+- [`wagmiConfig.ts`](./src/config/wagmiConfig.ts)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+You can copy them from the GitHub repo and study the code.
+
+---
+
+## 🔑 Step 5 — Add Your Reown Project ID
+
+Create a `.env` file in the root of `src/` and add:
+
+```
+NEXT_PUBLIC_REOWN_PROJECT_ID=your_reown_project_id_here
+```
+
+You’ll find this ID in your Reown project dashboard.
+
+---
+
+## 🧠 Step 6 — Set Up the Global Context Provider
+
+Create a folder: `src/context/`  
+Then add: [`index.tsx`](./src/context/index.tsx)
+
+This wraps your app with Reown + Wagmi + React Query providers.
+
+---
+
+## 🌐 Step 7 — Set Up Your Front Page
+
+Update [`app/page.tsx`](./src/app/page.tsx) with:
+
+- Wallet connect button
+- Form with email input
+- Logic to protect data with `@iexec/dataprotector`
+
+---
+
+## ▶️ Step 8 — Run the App
+
+```bash
+npm run dev
+```
+
+App will be available at [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 🧩 Wallet Compatibility
+
+The iExec blockchain only supports the following wallet providers:
+
+- MetaMask
+- Coinbase Wallet
+- Brave Wallet
+- WalletConnect
+- Zerion
+
+❌ Other wallets may not work with the SDKs.
+
+---
+
+## ✅ You're All Set!
+
+You can now **connect your wallet**, **submit your email**, and **protect it using iExec**!
