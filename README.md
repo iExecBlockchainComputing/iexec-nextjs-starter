@@ -25,7 +25,7 @@ During setup, choose your preferences:
 
 ---
 
-## 🔐 Step 2 — Create Your Reown Project
+## 🔐 Step 2 — Create Your Reown Project - Wallet Provider
 
 Go to [https://cloud.reown.com/app](https://cloud.reown.com/app)  
 → Create a project
@@ -33,6 +33,8 @@ Go to [https://cloud.reown.com/app](https://cloud.reown.com/app)
 → Select **Next.js** as the framework
 
 You’ll be asked for the **Homepage URL**. you can run your project to find your URL:
+
+> **Note:** The URL during Reown project creation is optional. It mainly serves to protect your project ID by restricting usage to specific domains.
 
 ```bash
 npm run dev
