@@ -12,6 +12,18 @@ import {
 import { Input } from "@/components/ui/input";
 import SoonerList from "@/modules/SonnerList";
 import { DialogForm } from "@/modules/DialogForm";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Loader } from "lucide-react";
 
 export default function Home() {
   const { open } = useAppKit();
@@ -24,7 +36,6 @@ export default function Home() {
     name: "",
     data: "",
   });
-  const [protectedData, setProtectedData] = useState<ProtectedData>();
 
   const login = () => {
     open({ view: "Connect" });
@@ -50,23 +61,35 @@ export default function Home() {
     initializeDataProtector();
   }, [isConnected, connector]);
 
-  const protectData = async (event) => {
-    event.preventDefault();
-    if (dataProtectorCore) {
-      try {
-        const protectedData = await dataProtectorCore.protectData({
+  const protectData = useMutation({
+    mutationFn: async () => {
+      if (dataProtectorCore) {
+        return await dataProtectorCore.protectData({
           name: dataToProtect.name,
           data: {
             email: dataToProtect.data,
           },
         });
-        console.log("Protected Data:", protectedData);
-        setProtectedData(protectedData);
-      } catch (error) {
-        console.error("Error protecting data:", error);
       }
-    }
-  };
+    },
+    onSuccess: (protectedData) => {
+      if (protectedData) {
+        toast.success("Protected data created.", {
+          action: {
+            label: "Open explorer page",
+            onClick: () =>
+              window.open(
+                `https://explorer-v2-git-feat-dev-preview-i-exec.vercel.app/bellecour/dataset/${protectedData.address.toLowerCase()}`,
+                "_blank"
+              ),
+          },
+        });
+      }
+    },
+    onError: () => {
+      toast.error("An error occurred please try again.");
+    },
+  });
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -89,11 +112,18 @@ export default function Home() {
       <section className="p-2 pt-8">
         {isConnected ? (
           <div className="p-2 space-y-6">
-            <form onSubmit={protectData} className="space-y-2">
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                protectData.mutate();
+              }}
+              className="space-y-2"
+            >
               <h2>Protect data form</h2>
               <div className="space-y-1">
                 <label htmlFor="data_to_protect">Data to protect name</label>
                 <Input
+                  disabled={protectData.isPending}
                   onChange={(e) =>
                     setDataToProtect((prevData) => ({
                       ...prevData,
@@ -108,6 +138,7 @@ export default function Home() {
               <div className="space-y-1">
                 <label htmlFor="data_to_protect">Data to protect</label>
                 <Input
+                  disabled={protectData.isPending}
                   onChange={(e) =>
                     setDataToProtect((prevData) => ({
                       ...prevData,
@@ -120,12 +151,44 @@ export default function Home() {
                 />
               </div>
               <Button
-                disabled={!dataToProtect.name || !dataToProtect.data}
+                disabled={
+                  !dataToProtect.name ||
+                  !dataToProtect.data ||
+                  protectData.isPending
+                }
                 type="submit"
               >
                 Protect my data
+                {protectData.isPending && <Loader className="animate-spin" />}
               </Button>
             </form>
+            {protectData.data && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>My protectedData information</CardTitle>
+                  <CardAction>
+                    <Button asChild>
+                      <a
+                        href={`https://explorer-v2-git-feat-dev-preview-i-exec.vercel.app/bellecour/dataset/${protectData.data.address.toLowerCase()}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Show on explorer
+                      </a>
+                    </Button>
+                  </CardAction>
+                </CardHeader>
+                <CardContent>
+                  <p>Name : {protectData.data.name}</p>
+                  <p>Address : {protectData.data.address}</p>
+                  <p>Owner : {protectData.data.owner}</p>
+                  <p>Multiaddr : {protectData.data.multiaddr}</p>
+                </CardContent>
+                <CardFooter>
+                  <p>Card Footer</p>
+                </CardFooter>
+              </Card>
+            )}
             <div className="space-y-2">
               <h2>Useful components</h2>
               <Button variant="outline" asChild>
@@ -151,15 +214,6 @@ export default function Home() {
                 <DialogForm />
               </div>
             </div>
-            {protectedData && (
-              <div className="bg-emerald-200 p-4 rounded-2xl">
-                <p>My protectedData information</p>
-                <p>Name : {protectedData.name}</p>
-                <p>Address : {protectedData.address}</p>
-                <p>Owner : {protectedData.owner}</p>
-                <p>Multiaddr : {protectedData.multiaddr}</p>
-              </div>
-            )}
           </div>
         ) : (
           <p>Please connect your wallet</p>
