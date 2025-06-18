@@ -10,6 +10,8 @@ import {
   ProtectedData,
 } from "@iexec/dataprotector";
 import { Input } from "@/components/ui/input";
+import SoonerList from "@/modules/SonnerList";
+import { DialogForm } from "@/modules/DialogForm";
 
 export default function Home() {
   const { open } = useAppKit();
@@ -70,9 +72,9 @@ export default function Home() {
     <div className="max-w-4xl mx-auto">
       <nav className="bg-neutral-100">
         <div className="max-w-4xl mx-auto flex justify-between items-center p-2">
-          <div className="ml-3 font-mono leading-5 font-bold">
+          <h1 className="ml-3 font-mono leading-5 font-bold">
             iExec starter front
-          </div>
+          </h1>
           {!isConnected ? (
             <Button onClick={login} variant={"default"}>
               Connect my wallet
@@ -86,8 +88,9 @@ export default function Home() {
       </nav>
       <section className="p-2 pt-8">
         {isConnected ? (
-          <div>
-            <form onSubmit={protectData} className="p-2 space-y-2">
+          <div className="p-2 space-y-6">
+            <form onSubmit={protectData} className="space-y-2">
+              <h2>Protect data form</h2>
               <div className="space-y-1">
                 <label htmlFor="data_to_protect">Data to protect name</label>
                 <Input
@@ -123,6 +126,31 @@ export default function Home() {
                 Protect my data
               </Button>
             </form>
+            <div className="space-y-2">
+              <h2>Useful components</h2>
+              <Button variant="outline" asChild>
+                <a
+                  href="http://ui.shadcn.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  ShadCn website
+                </a>
+              </Button>
+              <div className="space-y-1">
+                <h3>Sooner</h3>
+                <p>
+                  It can be used to show useful notification or other
+                  information
+                </p>
+                <SoonerList />
+              </div>
+              <div className="space-y-1">
+                <h3>Dialog</h3>
+                <p>Useful for small form that don`t require a page</p>
+                <DialogForm />
+              </div>
+            </div>
             {protectedData && (
               <div className="bg-emerald-200 p-4 rounded-2xl">
                 <p>My protectedData information</p>
