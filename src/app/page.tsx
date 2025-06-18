@@ -12,6 +12,14 @@ import {
 import { Input } from "@/components/ui/input";
 import SoonerList from "@/modules/SonnerList";
 import { DialogForm } from "@/modules/DialogForm";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardAction,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 
 export default function Home() {
   const { open } = useAppKit();
@@ -126,6 +134,33 @@ export default function Home() {
                 Protect my data
               </Button>
             </form>
+            {protectedData && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>My protectedData information</CardTitle>
+                  <CardAction>
+                    <Button asChild>
+                      <a
+                        href={`https://explorer-v2-git-feat-dev-preview-i-exec.vercel.app/bellecour/dataset/${protectedData.address.toLowerCase()}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Show on explorer
+                      </a>
+                    </Button>
+                  </CardAction>
+                </CardHeader>
+                <CardContent>
+                  <p>Name : {protectedData.name}</p>
+                  <p>Address : {protectedData.address}</p>
+                  <p>Owner : {protectedData.owner}</p>
+                  <p>Multiaddr : {protectedData.multiaddr}</p>
+                </CardContent>
+                <CardFooter>
+                  <p>Card Footer</p>
+                </CardFooter>
+              </Card>
+            )}
             <div className="space-y-2">
               <h2>Useful components</h2>
               <Button variant="outline" asChild>
@@ -151,15 +186,6 @@ export default function Home() {
                 <DialogForm />
               </div>
             </div>
-            {protectedData && (
-              <div className="bg-emerald-200 p-4 rounded-2xl">
-                <p>My protectedData information</p>
-                <p>Name : {protectedData.name}</p>
-                <p>Address : {protectedData.address}</p>
-                <p>Owner : {protectedData.owner}</p>
-                <p>Multiaddr : {protectedData.multiaddr}</p>
-              </div>
-            )}
           </div>
         ) : (
           <p>Please connect your wallet</p>
