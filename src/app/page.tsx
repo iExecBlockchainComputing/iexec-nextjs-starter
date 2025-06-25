@@ -39,7 +39,8 @@ export default function Home() {
   useEffect(() => {
     const initializeDataProtector = async () => {
       if (isConnected && connector) {
-        const provider = await connector.getProvider();
+        const provider =
+          (await connector.getProvider()) as import("ethers").Eip1193Provider;
         const dataProtector = new IExecDataProtector(provider);
         setDataProtectorCore(dataProtector.core);
       }
@@ -48,7 +49,7 @@ export default function Home() {
     initializeDataProtector();
   }, [isConnected, connector]);
 
-  const protectData = async (event) => {
+  const protectData = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     if (dataProtectorCore) {
       try {
