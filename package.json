@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@iexec/dataprotector": "^2.0.0-beta.13",
+    "@iexec/dataprotector": "^2.0.0-beta.16",
     "@radix-ui/react-slot": "^1.1.2",
     "@reown/appkit": "^1.7.0",
     "@reown/appkit-adapter-wagmi": "^1.7.0",
