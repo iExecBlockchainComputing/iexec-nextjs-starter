@@ -5,7 +5,7 @@ const WelcomeBlock: React.FC = () => {
     <div className="bg-gradient-to-br dark:from-[#82828E] dark:to-[#82828E00] from-[#E0E4F6] to-[#F4F7FC] rounded-2xl p-12 md:p-8 mb-8 text-gray-800 text-center">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-3xl font-bold mb-4 text-gray-800">
-          Welcome to the iExec Starter
+          Welcome to the iExec NextJs Starter
         </h1>
         <p className="text-xl md:text-lg mb-8 text-gray-700 leading-relaxed">
           This starter allows you to quickly get started with iExec

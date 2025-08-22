@@ -75,7 +75,7 @@ export default function Home() {
       <nav className="bg-[#F4F7FC] rounded-xl p-4 mb-8 flex justify-between items-center">
         <div className="flex items-center gap-6">
           <div className="font-mono text-xl font-bold text-gray-800">
-            iExec Starter
+            iExec NextJs Starter
           </div>
         </div>
         {!isConnected ? (

@@ -1,4 +1,4 @@
-# 🚀 iExec Starter - Decentralized Data Protection
+# 🚀 iExec NextJs Starter - Decentralized Data Protection
 
 2. **Install dependencies:**
 `5. **Start the project:**
