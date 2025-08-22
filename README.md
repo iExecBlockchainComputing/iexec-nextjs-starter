@@ -1,6 +1,163 @@
-# 🛠️ iExec Front Starter — Getting Started with Reown & DataProtector
+# 🚀 iExec Starter - Decentralized Data Protection
 
-This guide walks you through setting up a **Next.js frontend** integrated with **Reown (WalletConnect)** and **iExec DataProtector**.
+2. **Install dependencies:**
+`5. **Start the project:**
+```bash
+npm run dev
+```
+
+Your app will be available at [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 🧩 Compatible wallets
+
+1. **Create your Reown project:**
+   - Go to [https://cloud.reown.com/app](https://cloud.reown.com/app)
+   - Create a project and choose **AppKit** → **Next.js**
+
+2. **Configure environment variables:**
+```bash
+# Create a .env.local file
+NEXT_PUBLIC_REOWN_PROJECT_ID=your_reown_project_id
+```
+
+1. **Start the project:**r to quickly get started with iExec DataProtector and Next.js.
+
+---
+
+## 📋 About
+
+This project is a simple starter that allows you to:
+
+- Connect a Web3 wallettarter - Protection des données décentralisée
+
+Un starter minimaliste pour commencer rapidement avec iExec DataProtector et Next.js.
+
+---
+
+## 📋 À propos
+
+Ce projet est un starter simple qui vous permet de :
+
+- Connect a Web3 wallet
+- Protect data with iExec DataProtector
+- Discover basic iExec features
+
+**Included features:**
+- ✅ Wallet connection with Reown (WalletConnect)
+- ✅ Data protection with iExec DataProtector  
+- ✅ Simple and clean user interface
+- ✅ No unnecessary UI dependencies
+
+---
+
+## 🛠️ Installation
+
+1. **Clone the project:**
+```bash
+git clone <repo-url>
+cd iexec-front-stater
+```
+
+2. **Install dependencies:**
+
+---
+
+## 🛠️ Installation
+
+1. **Clonez le projet :**
+```bash
+git clone <repo-url>
+cd iexec-front-stater
+```
+
+2. **Installez les dépendances :**
+```bash
+npm install
+```
+
+3. **Créez votre projet Reown :**
+   - Allez sur [https://cloud.reown.com/app](https://cloud.reown.com/app)
+   - Créez un projet et choisissez **AppKit** → **Next.js**
+
+4. **Configurez les variables d'environnement :**
+```bash
+# Créez un fichier .env.local
+NEXT_PUBLIC_REOWN_PROJECT_ID=votre_project_id_reown
+```
+
+5. **Lancez le projet :**
+```bash
+npm run dev
+```
+
+Votre app sera disponible sur [http://localhost:3000](http://localhost:3000)
+
+---
+
+## 🧩 Wallets compatibles
+
+iExec fonctionne uniquement avec ces wallets :
+
+- MetaMask
+- Coinbase Wallet
+- Brave Wallet  
+- WalletConnect
+- Zerion
+
+❌ Other wallets may not work with iExec SDKs.
+
+---
+
+## 📁 Project structure
+
+```
+src/
+├── app/
+│   ├── page.tsx          # Main page with iExec logic
+│   ├── layout.tsx        # Global layout
+│   └── globals.css       # Global styles
+├── components/
+│   └── WelcomeBlock.tsx  # Welcome block
+├── config/
+│   ├── wagmiConfig.ts    # Wagmi/Reown configuration
+│   └── bellecourChainConfig.ts # Bellecour blockchain config
+└── context/
+    └── index.tsx         # Global providers
+```
+
+---
+
+## 🔍 How it works
+
+1. **Connection:** Use Reown to connect your wallet
+2. **Protection:** Enter data to protect in the form
+3. **iExec:** Data is encrypted and stored via DataProtector
+4. **Result:** You receive the address and metadata of protected data
+
+---
+
+## 🚀 Next steps
+
+This starter is intentionally minimal. You can extend it with:
+
+- More iExec features (compute, marketplace, etc.)
+- A more complex user interface
+- Protected dataset management
+- Integration with other iExec services
+
+---
+
+## 📚 Resources
+
+- [iExec Documentation](https://docs.iex.ec/)
+- [DataProtector SDK](https://tools.docs.iex.ec/tools/dataprotector)
+- [Reown/WalletConnect](https://docs.walletconnect.com/)
+
+---
+
+**Happy coding with iExec! 🔒✨**
 
 ---
 
