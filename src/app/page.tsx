@@ -7,6 +7,7 @@ import {
   IExecDataProtector,
   IExecDataProtectorCore,
   ProtectedData,
+  GrantedAccess,
 } from "@iexec/dataprotector";
 import WelcomeBlock from "@/components/WelcomeBlock";
 import wagmiNetworks from "@/config/wagmiNetworks";
@@ -14,7 +15,7 @@ import wagmiNetworks from "@/config/wagmiNetworks";
 export default function Home() {
   const { open } = useAppKit();
   const { disconnectAsync } = useDisconnect();
-  const { isConnected, connector } = useAccount();
+  const { isConnected, connector, address } = useAccount();
   const chainId = useChainId();
   const { switchChain } = useSwitchChain();
 
@@ -26,6 +27,23 @@ export default function Home() {
   });
   const [protectedData, setProtectedData] = useState<ProtectedData>();
   const [isLoading, setIsLoading] = useState(false);
+
+  // iExec Web3Mail app addresses by chain
+  const web3MailAddresses = {
+    134: "0x781482c39cce25546583eac4957fb7bf04c277d2", // iExec Sidechain (Bellecour)
+    42161: "0xd5054a18565c4a9e5c1aa3ceb53258bd59d4c78c", // Arbitrum One
+  } as const;
+
+  // Grant Access form data
+  const [grantAccessData, setGrantAccessData] = useState({
+    protectedDataAddress: "",
+    authorizedApp: "",
+    authorizedUser: "",
+    pricePerAccess: 0,
+    numberOfAccess: 1,
+  });
+  const [grantedAccess, setGrantedAccess] = useState<GrantedAccess>();
+  const [isGrantingAccess, setIsGrantingAccess] = useState(false);
 
   const networks = Object.values(wagmiNetworks);
 
@@ -41,25 +59,71 @@ export default function Home() {
     }
   };
 
-  const handleChainChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChainChange = async (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     const selectedChainId = parseInt(event.target.value);
-    if (switchChain) {
-      switchChain({ chainId: selectedChainId });
+    if (selectedChainId && selectedChainId !== chainId && switchChain) {
+      try {
+        await switchChain({ chainId: selectedChainId });
+      } catch (error) {
+        console.error("Failed to switch chain:", error);
+      }
     }
+  };
+
+  // Get Web3Mail address for current chain
+  const getCurrentWeb3MailAddress = () => {
+    return web3MailAddresses[chainId as keyof typeof web3MailAddresses] || "";
   };
 
   useEffect(() => {
     const initializeDataProtector = async () => {
       if (isConnected && connector) {
-        const provider =
-          (await connector.getProvider()) as import("ethers").Eip1193Provider;
-        const dataProtector = new IExecDataProtector(provider);
-        setDataProtectorCore(dataProtector.core);
+        try {
+          const provider =
+            (await connector.getProvider()) as import("ethers").Eip1193Provider;
+          const dataProtector = new IExecDataProtector(provider);
+          setDataProtectorCore(dataProtector.core);
+        } catch (error) {
+          console.error("Failed to initialize data protector:", error);
+        }
       }
     };
 
     initializeDataProtector();
   }, [isConnected, connector]);
+
+  const grantDataAccess = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (dataProtectorCore) {
+      setIsGrantingAccess(true);
+      try {
+        const result = await dataProtectorCore.grantAccess({
+          protectedData: grantAccessData.protectedDataAddress,
+          authorizedApp: grantAccessData.authorizedApp,
+          authorizedUser: grantAccessData.authorizedUser,
+          pricePerAccess: grantAccessData.pricePerAccess,
+          numberOfAccess: grantAccessData.numberOfAccess,
+          onStatusUpdate: ({
+            title,
+            isDone,
+          }: {
+            title: string;
+            isDone: boolean;
+          }) => {
+            console.log(`Grant Access Status: ${title}, Done: ${isDone}`);
+          },
+        });
+        console.log("Granted Access:", result);
+        setGrantedAccess(result);
+      } catch (error) {
+        console.error("Error granting access:", error);
+      } finally {
+        setIsGrantingAccess(false);
+      }
+    }
+  };
 
   const protectData = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -152,6 +216,7 @@ export default function Home() {
                   id="data_name"
                   placeholder="Name to identify your data"
                   value={dataToProtect.name}
+                  maxLength={100}
                 />
               </div>
               <div className="mb-5">
@@ -172,6 +237,7 @@ export default function Home() {
                   id="data_content"
                   placeholder="Enter text to protect"
                   value={dataToProtect.data}
+                  maxLength={500}
                 />
               </div>
               <button
@@ -186,7 +252,7 @@ export default function Home() {
             </form>
 
             {protectedData && (
-              <div className="bg-green-100 border border-green-300 rounded-xl p-6 mt-6">
+              <div className="bg-green-50 border rounded-xl p-6 mt-6">
                 <h3 className="text-green-800 mb-4 text-lg font-semibold">
                   ✅ Data protected successfully!
                 </h3>
@@ -206,6 +272,237 @@ export default function Home() {
                 </div>
               </div>
             )}
+
+            {/* Grant Access Form */}
+            <div className="mt-12 pt-8 border-t border-gray-200">
+              <h2 className="mb-6 text-2xl font-semibold text-gray-800">
+                Grant Access to Protected Data
+              </h2>
+              <form onSubmit={grantDataAccess} className="mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      htmlFor="protected_data_address"
+                      className="block mb-2 font-medium text-gray-700"
+                    >
+                      Protected Data Address *
+                    </label>
+                    <input
+                      value={grantAccessData.protectedDataAddress}
+                      onChange={(e) =>
+                        setGrantAccessData((prev) => ({
+                          ...prev,
+                          protectedDataAddress: e.target.value,
+                        }))
+                      }
+                      type="text"
+                      id="protected_data_address"
+                      placeholder="0x123abc..."
+                      maxLength={42}
+                      required
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Address of the protected data you own
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setGrantAccessData((prev) => ({
+                          ...prev,
+                          protectedDataAddress: protectedData?.address || "",
+                        }))
+                      }
+                      disabled={!protectedData?.address}
+                      className="mt-1 secondary h-9"
+                    >
+                      Use protected data address
+                    </button>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="authorized_user"
+                      className="block mb-2 font-medium text-gray-700"
+                    >
+                      Authorized User Address *
+                    </label>
+                    <input
+                      value={grantAccessData.authorizedUser}
+                      onChange={(e) =>
+                        setGrantAccessData((prev) => ({
+                          ...prev,
+                          authorizedUser: e.target.value,
+                        }))
+                      }
+                      type="text"
+                      id="authorized_user"
+                      placeholder="0x789cba... or 0x0000... for all users"
+                      maxLength={42}
+                      required
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      User who can access the data (use 0x0000... for all users)
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setGrantAccessData((prev) => ({
+                          ...prev,
+                          authorizedUser: address || "",
+                        }))
+                      }
+                      disabled={!address}
+                      className="mt-1 secondary h-9"
+                    >
+                      Use current wallet address
+                    </button>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="authorized_app"
+                      className="block mb-2 font-medium text-gray-700"
+                    >
+                      Authorized App Address *
+                    </label>
+                    <input
+                      value={grantAccessData.authorizedApp}
+                      onChange={(e) =>
+                        setGrantAccessData((prev) => ({
+                          ...prev,
+                          authorizedApp: e.target.value,
+                        }))
+                      }
+                      type="text"
+                      id="authorized_app"
+                      placeholder="Enter iExec app address (0x...)"
+                      maxLength={42}
+                      required
+                    />
+                    <div className="text-xs text-gray-500 mt-2 space-y-1">
+                      <p>
+                        application authorized to access your protected data.
+                      </p>
+                      <p className="text-gray-400 mt-1">
+                        App addresses vary by chain. Always verify before
+                        granting access.
+                      </p>
+                    </div>
+                    {getCurrentWeb3MailAddress() && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setGrantAccessData((prev) => ({
+                            ...prev,
+                            authorizedApp: getCurrentWeb3MailAddress(),
+                          }))
+                        }
+                        className="mt-2 secondary h-9"
+                      >
+                        Use Web3Mail Whitelist address for current chain
+                      </button>
+                    )}
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="number_of_access"
+                      className="block mb-2 font-medium text-gray-700"
+                    >
+                      Number of Access
+                    </label>
+                    <input
+                      value={grantAccessData.numberOfAccess}
+                      onChange={(e) =>
+                        setGrantAccessData((prev) => ({
+                          ...prev,
+                          numberOfAccess: parseInt(e.target.value) || 1,
+                        }))
+                      }
+                      type="number"
+                      id="number_of_access"
+                      placeholder="1"
+                      min="1"
+                      max="10000"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      How many times the data can be accessed
+                    </p>
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label
+                      htmlFor="price_per_access"
+                      className="block mb-2 font-medium text-gray-700"
+                    >
+                      Price Per Access (nRLC)
+                    </label>
+                    <input
+                      value={grantAccessData.pricePerAccess}
+                      onChange={(e) =>
+                        setGrantAccessData((prev) => ({
+                          ...prev,
+                          pricePerAccess: parseFloat(e.target.value) || 0,
+                        }))
+                      }
+                      type="number"
+                      id="price_per_access"
+                      placeholder="0"
+                      min="0"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Fee in nano RLC for each access (1 RLC = 10^9 nRLC)
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-6">
+                  <button
+                    disabled={
+                      !grantAccessData.protectedDataAddress ||
+                      !grantAccessData.authorizedUser ||
+                      !grantAccessData.authorizedApp ||
+                      isGrantingAccess
+                    }
+                    className="primary"
+                    type="submit"
+                  >
+                    {isGrantingAccess ? "Granting Access..." : "Grant Access"}
+                  </button>
+                </div>
+              </form>
+
+              {grantedAccess && (
+                <div className="bg-blue-100 border border-blue-300 rounded-xl p-6 mt-6">
+                  <h3 className="text-blue-800 mb-4 text-lg font-semibold">
+                    ✅ Access granted successfully!
+                  </h3>
+                  <div className="text-blue-800 space-y-2 text-sm">
+                    <p>
+                      <strong>Dataset:</strong> {grantedAccess.dataset}
+                    </p>
+                    <p>
+                      <strong>Dataset Price:</strong>{" "}
+                      {grantedAccess.datasetprice} nRLC
+                    </p>
+                    <p>
+                      <strong>Volume:</strong> {grantedAccess.volume}
+                    </p>
+                    <p>
+                      <strong>App Restrict:</strong> {grantedAccess.apprestrict}
+                    </p>
+                    <p>
+                      <strong>Workerpool Restrict:</strong>{" "}
+                      {grantedAccess.workerpoolrestrict}
+                    </p>
+                    <p>
+                      <strong>Requester Restrict:</strong>{" "}
+                      {grantedAccess.requesterrestrict}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         ) : (
           <div className="text-center py-12 px-6">
