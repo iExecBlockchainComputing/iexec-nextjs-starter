@@ -252,11 +252,11 @@ export default function Home() {
             </form>
 
             {protectedData && (
-              <div className="bg-green-50 border rounded-xl p-6 mt-6">
-                <h3 className="text-green-800 mb-4 text-lg font-semibold">
+              <div className="bg-blue-100 border border-blue-300 rounded-xl p-6 mt-6">
+                <h3 className="text-blue-800 mb-4 text-lg font-semibold">
                   ✅ Data protected successfully!
                 </h3>
-                <div className="text-green-800 space-y-2">
+                <div className="text-blue-800 space-y-2 text-sm">
                   <p>
                     <strong>Name:</strong> {protectedData.name}
                   </p>
