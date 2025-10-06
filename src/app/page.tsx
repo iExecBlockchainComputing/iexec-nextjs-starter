@@ -2,18 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { useAppKit } from "@reown/appkit/react";
-import { useAccount, useDisconnect } from "wagmi";
+import { useAccount, useDisconnect, useChainId, useSwitchChain } from "wagmi";
 import {
   IExecDataProtector,
   IExecDataProtectorCore,
   ProtectedData,
 } from "@iexec/dataprotector";
 import WelcomeBlock from "@/components/WelcomeBlock";
+import wagmiNetworks from "@/config/wagmiNetworks";
 
 export default function Home() {
   const { open } = useAppKit();
   const { disconnectAsync } = useDisconnect();
   const { isConnected, connector } = useAccount();
+  const chainId = useChainId();
+  const { switchChain } = useSwitchChain();
 
   const [dataProtectorCore, setDataProtectorCore] =
     useState<IExecDataProtectorCore | null>(null);
@@ -24,6 +27,8 @@ export default function Home() {
   const [protectedData, setProtectedData] = useState<ProtectedData>();
   const [isLoading, setIsLoading] = useState(false);
 
+  const networks = Object.values(wagmiNetworks);
+
   const login = () => {
     open({ view: "Connect" });
   };
@@ -33,6 +38,13 @@ export default function Home() {
       await disconnectAsync();
     } catch (err) {
       console.error("Failed to logout:", err);
+    }
+  };
+
+  const handleChainChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedChainId = parseInt(event.target.value);
+    if (switchChain) {
+      switchChain({ chainId: selectedChainId });
     }
   };
 
@@ -78,15 +90,39 @@ export default function Home() {
             iExec NextJs Starter
           </div>
         </div>
-        {!isConnected ? (
-          <button onClick={login} className="primary">
-            Connect my wallet
-          </button>
-        ) : (
-          <button onClick={logout} className="secondary">
-            Disconnect
-          </button>
-        )}
+        <div className="flex items-center gap-4">
+          {isConnected && (
+            <div className="flex items-center gap-2">
+              <label
+                htmlFor="chain-selector"
+                className="text-sm font-medium text-gray-700"
+              >
+                Chain:
+              </label>
+              <select
+                id="chain-selector"
+                value={chainId}
+                onChange={handleChainChange}
+                className="chain-selector"
+              >
+                {networks?.map((network) => (
+                  <option key={network.id} value={network.id}>
+                    {network.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+          {!isConnected ? (
+            <button onClick={login} className="primary">
+              Connect my wallet
+            </button>
+          ) : (
+            <button onClick={logout} className="secondary">
+              Disconnect
+            </button>
+          )}
+        </div>
       </nav>
 
       <WelcomeBlock />

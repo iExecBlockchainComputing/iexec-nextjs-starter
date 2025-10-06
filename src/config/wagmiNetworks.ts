@@ -1,7 +1,14 @@
-export const bellecour = {
+import {
+  type AppKitNetwork,
+  arbitrumSepolia,
+  arbitrum,
+} from '@reown/appkit/networks';
+
+export { arbitrumSepolia, arbitrum } from '@reown/appkit/networks';
+
+export const bellecour: AppKitNetwork = {
   id: 0x86,
   name: 'iExec Sidechain',
-  network: 'bellecour',
   nativeCurrency: {
     decimals: 18,
     name: 'xRLC',
@@ -19,3 +26,11 @@ export const bellecour = {
     default: { name: 'Blockscout', url: 'https://blockscout-bellecour.iex.ec' },
   },
 };
+
+const wagmiNetworks = {
+  bellecour,
+  arbitrumSepolia,
+  arbitrum,
+};
+
+export default wagmiNetworks;
