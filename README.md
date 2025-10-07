@@ -16,7 +16,6 @@ This project is a simple starter that allows you to:
 **Included features:**
 - ✅ Wallet connection with Reown AppKit (WalletConnect)
 - ✅ Data protection with iExec DataProtector
-- ✅ Grant access functionality for protected data
 - ✅ Multi-chain support (iExec Sidechain, Arbitrum)
 - ✅ Simple and clean user interface
 - ✅ Built with Next.js, TypeScript, and Tailwind CSS
@@ -95,12 +94,6 @@ src/
 2. **Protection:** Enter data name and content to protect
 3. **iExec:** Data is encrypted and stored via DataProtector
 4. **Result:** You receive the address and metadata of protected data
-
-### Grant Access
-1. **Select Network:** Choose the appropriate blockchain network
-2. **Configure Access:** Set protected data address, authorized user, and app
-3. **Authorization:** Grant specific permissions for data access
-4. **Result:** Receive confirmation of granted access with details
 
 ---
 
