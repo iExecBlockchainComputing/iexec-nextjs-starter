@@ -318,9 +318,6 @@ export default function Home() {
                       </a>
                     )}
                   </p>
-                  <p>
-                    <strong>Multiaddr:</strong> {protectedData.multiaddr}
-                  </p>
                 </div>
               </div>
             )}
