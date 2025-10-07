@@ -365,7 +365,7 @@ export default function Home() {
                       disabled={!protectedData?.address}
                       className="mt-1 secondary h-9"
                     >
-                      Use protected data address
+                      Use previously created Protected Data
                     </button>
                   </div>
 
