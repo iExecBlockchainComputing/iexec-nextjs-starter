@@ -301,7 +301,7 @@ export default function Home() {
                         rel="noopener noreferrer"
                         className="ml-2 inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
                       >
-                        View Dataset <ExternalLinkIcon />
+                        View Protected Data <ExternalLinkIcon />
                       </a>
                     )}
                   </p>
@@ -413,7 +413,7 @@ export default function Home() {
                       htmlFor="authorized_app"
                       className="block mb-2 font-medium text-gray-700"
                     >
-                      Authorized App Address *
+                      Authorized iApp Address *
                     </label>
                     <input
                       value={grantAccessData.authorizedApp}
@@ -425,16 +425,16 @@ export default function Home() {
                       }
                       type="text"
                       id="authorized_app"
-                      placeholder="Enter iExec app address (0x...)"
+                      placeholder="Enter iApp address (0x...)"
                       maxLength={42}
                       required
                     />
                     <div className="text-xs text-gray-500 mt-2 space-y-1">
                       <p>
-                        application authorized to access your protected data.
+                        iApp authorized to access your protected data.
                       </p>
                       <p className="text-gray-400 mt-1">
-                        App addresses vary by chain. Always verify before
+                        iApp addresses vary by chain. Always verify before
                         granting access.
                       </p>
                       {getExplorerUrl("apps") && (
@@ -444,7 +444,7 @@ export default function Home() {
                           rel="noopener noreferrer"
                           className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
                         >
-                          See available apps on Explorer <ExternalLinkIcon />
+                          See available iApp on Explorer <ExternalLinkIcon />
                         </a>
                       )}
                     </div>
@@ -539,7 +539,7 @@ export default function Home() {
                   </h3>
                   <div className="text-blue-800 space-y-2 text-sm">
                     <p>
-                      <strong>Dataset:</strong> {grantedAccess.dataset}
+                      <strong>Protected Data:</strong> {grantedAccess.dataset}
                       {getExplorerUrl(grantedAccess.dataset, "dataset") && (
                         <a
                           href={
@@ -549,20 +549,20 @@ export default function Home() {
                           rel="noopener noreferrer"
                           className="ml-2 inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
                         >
-                          View Dataset
+                          View Protected Data
                           <ExternalLinkIcon />
                         </a>
                       )}
                     </p>
                     <p>
-                      <strong>Dataset Price:</strong>{" "}
+                      <strong>Protected Data Price:</strong>{" "}
                       {grantedAccess.datasetprice} nRLC
                     </p>
                     <p>
                       <strong>Volume:</strong> {grantedAccess.volume}
                     </p>
                     <p>
-                      <strong>App Restrict:</strong> {grantedAccess.apprestrict}
+                      <strong>iApp Restrict:</strong> {grantedAccess.apprestrict}
                     </p>
                     <p>
                       <strong>Workerpool Restrict:</strong>{" "}
