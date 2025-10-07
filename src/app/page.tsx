@@ -83,7 +83,9 @@ export default function Home() {
         try {
           const provider =
             (await connector.getProvider()) as import("ethers").Eip1193Provider;
-          const dataProtector = new IExecDataProtector(provider);
+          const dataProtector = new IExecDataProtector(provider, {
+            allowExperimentalNetworks: true,
+          });
           setDataProtectorCore(dataProtector.core);
         } catch (error) {
           console.error("Failed to initialize data protector:", error);

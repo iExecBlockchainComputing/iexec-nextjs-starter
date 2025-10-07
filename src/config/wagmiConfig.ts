@@ -23,6 +23,7 @@ export const wagmiAdapter = new WagmiAdapter({
     Object.values(wagmiNetworks).map((network) => [network.id, http()])
   ),
   projectId,
+  ssr: true,
 });
 
 // Create the modal
