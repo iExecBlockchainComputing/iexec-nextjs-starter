@@ -1,4 +1,4 @@
-# # 🚀 iExec Next.js Starter - Decentralized Data Protection
+# 🚀 iExec Next.js Starter - Decentralized Data Protection
 
 A minimal starter to quickly get started with iExec DataProtector and Next.js.
 
@@ -10,11 +10,13 @@ This project is a simple starter that allows you to:
 
 - Connect a Web3 wallet
 - Protect data with iExec DataProtector
+- Grant access to protected data
 - Discover basic iExec features
 
 **Included features:**
-- ✅ Wallet connection with Reown (WalletConnect)
-- ✅ Data protection with iExec DataProtector  
+- ✅ Wallet connection with Reown AppKit (WalletConnect)
+- ✅ Data protection with iExec DataProtector
+- ✅ Multi-chain support (iExec Sidechain, Arbitrum)
 - ✅ Simple and clean user interface
 - ✅ Built with Next.js, TypeScript, and Tailwind CSS
 
@@ -24,8 +26,8 @@ This project is a simple starter that allows you to:
 
 1. **Clone the project:**
 ```bash
-git clone <repo-url>
-cd iexec-front-stater
+git clone https://github.com/iExecBlockchainComputing/iexec-nextjs-starter.git
+cd iexec-nextjs-starter
 ```
 
 2. **Install dependencies:**
@@ -54,7 +56,7 @@ Your app will be available at [http://localhost:3000](http://localhost:3000)
 
 ## 🧩 Compatible Wallets
 
-iExec only works with these wallets:
+iExec Bellecour only works with these wallets:
 
 - MetaMask
 - Coinbase Wallet
@@ -62,7 +64,7 @@ iExec only works with these wallets:
 - WalletConnect
 - Zerion
 
-❌ Other wallets may not work with iExec SDKs.
+❌ Other wallets may not work with iExec SDKs on Bellecour.
 
 ---
 
@@ -78,7 +80,7 @@ src/
 │   └── WelcomeBlock.tsx  # Welcome component
 ├── config/
 │   ├── wagmiConfig.ts    # Wagmi/Reown configuration
-│   └── bellecourChainConfig.ts # Bellecour blockchain config
+│   └── wagmiNetworks.ts  # Supported blockchain networks
 └── context/
     └── index.tsx         # Global providers
 ```
@@ -87,10 +89,19 @@ src/
 
 ## 🔍 How It Works
 
-1. **Connection:** Use Reown to connect your wallet
-2. **Protection:** Enter data to protect in the form
+### Data Protection
+1. **Connection:** Use Reown AppKit to connect your wallet
+2. **Protection:** Enter data name and content to protect
 3. **iExec:** Data is encrypted and stored via DataProtector
 4. **Result:** You receive the address and metadata of protected data
+
+---
+
+## 🌐 Supported Networks
+
+- **iExec Sidechain (Bellecour)** - Chain ID: 134
+- **Arbitrum One** - Chain ID: 42161
+- **Arbitrum Sepolia** - Chain ID: 421614
 
 ---
 
@@ -98,17 +109,40 @@ src/
 
 This starter is intentionally minimal. You can extend it with:
 
-- More iExec features (compute, marketplace, etc.)
-- A more complex user interface
-- Protected dataset management
+- More iExec features (compute, marketplace, Web3Mail)
+- Advanced data management interface
+- Protected dataset marketplace
 - Integration with other iExec services
+- Custom iExec applications
+- Data monetization features
 
 ---
 
 ## 📚 Resources
 
 - [iExec Documentation](https://docs.iex.ec/)
-- [Reown/WalletConnect](https://docs.walletconnect.com/)
+- [iExec DataProtector API](https://docs.iex.ec/references/dataProtector)
+- [Reown AppKit Documentation](https://docs.reown.com/appkit/next/core/installation)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React Documentation](https://react.dev/)
+
+---
+
+## 🔧 Development
+
+```bash
+# Development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Lint code
+npm run lint
+```
 
 ---
 
