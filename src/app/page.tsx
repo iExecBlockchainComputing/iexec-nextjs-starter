@@ -97,12 +97,13 @@ export default function Home() {
 
   // Get explorer URL for current chain using iExec explorer
   const getExplorerUrl = (
-    address: string,
-    type: "address" | "dataset" = "address"
+    address: string | undefined,
+    type: "address" | "dataset" | "apps" = "address"
   ) => {
     const explorerSlug = explorerSlugs[chainId];
     if (!explorerSlug) return null;
 
+    if (!address) return `https://explorer.iex.ec/${explorerSlug}/${type}`;
     return `https://explorer.iex.ec/${explorerSlug}/${type}/${address}`;
   };
 
@@ -436,6 +437,16 @@ export default function Home() {
                         App addresses vary by chain. Always verify before
                         granting access.
                       </p>
+                      {getExplorerUrl("apps") && (
+                        <a
+                          href={getExplorerUrl("apps")!}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+                        >
+                          See available apps on Explorer <ExternalLinkIcon />
+                        </a>
+                      )}
                     </div>
                     {getCurrentWeb3MailAddress() && (
                       <button
