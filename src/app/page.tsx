@@ -10,7 +10,25 @@ import {
   GrantedAccess,
 } from "@iexec/dataprotector";
 import WelcomeBlock from "@/components/WelcomeBlock";
-import wagmiNetworks from "@/config/wagmiNetworks";
+import wagmiNetworks, { explorerSlugs } from "@/config/wagmiNetworks";
+
+// External Link Icon Component
+const ExternalLinkIcon = () => (
+  <svg
+    className="inline-block w-3 h-3 ml-1"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+    />
+  </svg>
+);
 
 export default function Home() {
   const { open } = useAppKit();
@@ -75,6 +93,17 @@ export default function Home() {
   // Get Web3Mail address for current chain
   const getCurrentWeb3MailAddress = () => {
     return web3MailAddresses[chainId as keyof typeof web3MailAddresses] || "";
+  };
+
+  // Get explorer URL for current chain using iExec explorer
+  const getExplorerUrl = (
+    address: string,
+    type: "address" | "dataset" = "address"
+  ) => {
+    const explorerSlug = explorerSlugs[chainId];
+    if (!explorerSlug) return null;
+
+    return `https://explorer.iex.ec/${explorerSlug}/${type}/${address}`;
   };
 
   useEffect(() => {
@@ -264,9 +293,30 @@ export default function Home() {
                   </p>
                   <p>
                     <strong>Address:</strong> {protectedData.address}
+                    {getExplorerUrl(protectedData.address, "dataset") && (
+                      <a
+                        href={getExplorerUrl(protectedData.address, "dataset")!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-2 inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+                      >
+                        View Dataset <ExternalLinkIcon />
+                      </a>
+                    )}
                   </p>
                   <p>
                     <strong>Owner:</strong> {protectedData.owner}
+                    {getExplorerUrl(protectedData.owner, "address") && (
+                      <a
+                        href={getExplorerUrl(protectedData.owner, "address")!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-2 inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+                      >
+                        View Address
+                        <ExternalLinkIcon />
+                      </a>
+                    )}
                   </p>
                   <p>
                     <strong>Multiaddr:</strong> {protectedData.multiaddr}
@@ -482,6 +532,19 @@ export default function Home() {
                   <div className="text-blue-800 space-y-2 text-sm">
                     <p>
                       <strong>Dataset:</strong> {grantedAccess.dataset}
+                      {getExplorerUrl(grantedAccess.dataset, "dataset") && (
+                        <a
+                          href={
+                            getExplorerUrl(grantedAccess.dataset, "dataset")!
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="ml-2 inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+                        >
+                          View Dataset
+                          <ExternalLinkIcon />
+                        </a>
+                      )}
                     </p>
                     <p>
                       <strong>Dataset Price:</strong>{" "}
@@ -500,6 +563,27 @@ export default function Home() {
                     <p>
                       <strong>Requester Restrict:</strong>{" "}
                       {grantedAccess.requesterrestrict}
+                      {grantedAccess.requesterrestrict !==
+                        "0x0000000000000000000000000000000000000000" &&
+                        getExplorerUrl(
+                          grantedAccess.requesterrestrict,
+                          "address"
+                        ) && (
+                          <a
+                            href={
+                              getExplorerUrl(
+                                grantedAccess.requesterrestrict,
+                                "address"
+                              )!
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-2 inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"
+                          >
+                            View Requester
+                            <ExternalLinkIcon />
+                          </a>
+                        )}
                     </p>
                   </div>
                 </div>
