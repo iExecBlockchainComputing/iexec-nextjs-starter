@@ -16,7 +16,7 @@ This project is a simple starter that allows you to:
 **Included features:**
 - ✅ Wallet connection with Reown AppKit (WalletConnect)
 - ✅ Data protection with iExec DataProtector
-- ✅ Multi-chain support (iExec Sidechain, Arbitrum)
+- ✅ Multi-chain support (Arbitrum One, Arbitrum Sepolia)
 - ✅ Simple and clean user interface
 - ✅ Built with Next.js, TypeScript, and Tailwind CSS
 
@@ -54,20 +54,6 @@ Your app will be available at [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 🧩 Compatible Wallets
-
-iExec Bellecour only works with these wallets:
-
-- MetaMask
-- Coinbase Wallet
-- Brave Wallet  
-- WalletConnect
-- Zerion
-
-❌ Other wallets may not work with iExec SDKs on Bellecour.
-
----
-
 ## 📁 Project Structure
 
 ```
@@ -99,7 +85,6 @@ src/
 
 ## 🌐 Supported Networks
 
-- **iExec Sidechain (Bellecour)** - Chain ID: 134
 - **Arbitrum One** - Chain ID: 42161
 - **Arbitrum Sepolia** - Chain ID: 421614
 

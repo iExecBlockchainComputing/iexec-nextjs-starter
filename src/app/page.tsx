@@ -48,7 +48,6 @@ export default function Home() {
 
   // iExec Web3Mail app addresses by chain
   const web3MailAddresses = {
-    134: "0x781482c39cce25546583eac4957fb7bf04c277d2", // iExec Sidechain (Bellecour)
     42161: "0xd5054a18565c4a9e5c1aa3ceb53258bd59d4c78c", // Arbitrum One
   } as const;
 
